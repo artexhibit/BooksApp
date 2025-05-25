@@ -251,6 +251,23 @@ private fun BookListScreen(
 @Preview()
 @Composable
 private fun BookListScreenPreview() {
+
+    val books = (1..100).map {
+        Book(
+            id = it.toString(),
+            title = "Book $it",
+            imageUrl = "https://test.com",
+            authors = listOf("Igor Volkov"),
+            description = "Description $it",
+            languages = emptyList(),
+            firstPublishYear = null,
+            averageRating = 4.67565,
+            ratingCount = 5,
+            numPages = 100,
+            numEditions = 3
+        )
+    }
+
     MaterialTheme {
         BookListScreen(
             state = BookListState(
