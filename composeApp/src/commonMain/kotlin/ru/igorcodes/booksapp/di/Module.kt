@@ -10,6 +10,7 @@ import ru.igorcodes.booksapp.book.data.network.RemoteBookDataSource
 import ru.igorcodes.booksapp.book.data.repository.DefaultBookRepository
 import ru.igorcodes.booksapp.book.domain.BookRepository
 import ru.igorcodes.booksapp.book.presentation.SelectedBookViewModel
+import ru.igorcodes.booksapp.book.presentation.book_details.BookDetailsViewModel
 import ru.igorcodes.booksapp.book.presentation.book_list.BookListViewModel
 import ru.igorcodes.booksapp.core.data.HttpClientFactory
 
@@ -24,4 +25,5 @@ val sharedModule = module {
 
     viewModelOf(::BookListViewModel)
     viewModelOf(::SelectedBookViewModel)
+    viewModelOf(::BookDetailsViewModel)
 }

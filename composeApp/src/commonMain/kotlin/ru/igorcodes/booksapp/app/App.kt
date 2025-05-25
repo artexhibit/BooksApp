@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -21,6 +22,9 @@ import androidx.navigation.navigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import ru.igorcodes.booksapp.book.presentation.SelectedBookViewModel
+import ru.igorcodes.booksapp.book.presentation.book_details.BookDetailsAction
+import ru.igorcodes.booksapp.book.presentation.book_details.BookDetailsScreenRoot
+import ru.igorcodes.booksapp.book.presentation.book_details.BookDetailsViewModel
 import ru.igorcodes.booksapp.book.presentation.book_list.BookListScreenRoot
 import ru.igorcodes.booksapp.book.presentation.book_list.BookListViewModel
 
@@ -61,14 +65,20 @@ fun App() {
                     val selectedBookViewModel =
                         it.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
+                    val viewModel = koinViewModel<BookDetailsViewModel>()
 
-
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Book details screen id is $selectedBook")
+                    LaunchedEffect(selectedBook) {
+                        selectedBook?.let {
+                            viewModel.onAction(BookDetailsAction.OnSelectedBookChange(it))
+                        }
                     }
+
+                    BookDetailsScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
             }
         }
