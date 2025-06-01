@@ -1,18 +1,14 @@
 package ru.igorcodes.booksapp.app
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -40,7 +36,14 @@ fun App() {
             navigation<Route.BookGraph>(
                 startDestination = Route.BookList,
             ) {
-                composable<Route.BookList> {
+                composable<Route.BookList>(
+                    exitTransition = {
+                        slideOutHorizontally()
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally()
+                    }
+                ) {
                     val viewModel = koinViewModel<BookListViewModel>()
                     val selectedBookViewModel =
                         it.sharedKoinViewModel<SelectedBookViewModel>(navController)
@@ -60,7 +63,18 @@ fun App() {
                         }
                     )
                 }
-                composable<Route.BookDetails> { //entry ->
+                composable<Route.BookDetails>(
+                    enterTransition = {
+                        slideInHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    },
+                    exitTransition = {
+                        slideOutHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    }
+                ) { //entry ->
                     //val args = entry.toRoute<Route.BookDetails>()
                     val selectedBookViewModel =
                         it.sharedKoinViewModel<SelectedBookViewModel>(navController)
